@@ -2,6 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # Health check for ECS/load balancer
+    path('api/health/', views.health_check, name='health_check'),
+    
     # Auth
     path('api/auth/login/', views.login, name='login'),
     
@@ -15,3 +18,4 @@ urlpatterns = [
     path('api/guides/current/', views.get_current_guide, name='get_current_guide'),
     path('api/guides/<int:guide_id>/', views.get_guide, name='get_guide'),
 ]
+

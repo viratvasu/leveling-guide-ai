@@ -7,6 +7,7 @@ from functools import wraps
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods as require_methods
 from django.views.decorators.csrf import csrf_exempt
+from django.db import connection
 import jwt
 from django.conf import settings
 
@@ -18,6 +19,24 @@ from .services import (
     generate_all_cells_progressive,
     regenerate_single_cell
 )
+
+
+# Health check for ECS/ALB
+def health_check(request):
+    """Health check endpoint for load balancer and container orchestration."""
+    try:
+        # Check database connection
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+        return JsonResponse({
+            'status': 'healthy',
+            'database': 'connected'
+        }, status=200)
+    except Exception as e:
+        return JsonResponse({
+            'status': 'unhealthy',
+            'error': str(e)
+        }, status=503)
 
 
 def success_response(data=None, message=None, status=200):
@@ -303,13 +322,22 @@ def regenerate_cell(request, guide_id):
     
     company_website = get_guide_meta(guide, 'company_website', '')
     
-    # Regenerate examples
+    # Get previous examples for context
+    previous_examples = []
+    guides_examples = guide.guides_examples
+    for row in guides_examples.get('rows', []):
+        if row['competency'] == competency:
+            previous_examples = row['cells'].get(level, {}).get('examples', [])
+            break
+    
+    # Regenerate examples with previous context
     new_examples = regenerate_single_cell(
         guide.guides_data,
         competency,
         level,
         feedback,
-        company_website
+        company_website,
+        previous_examples  # Pass previous examples for context
     )
     
     # Update guide examples
@@ -322,13 +350,7 @@ def regenerate_cell(request, guide_id):
     guide.guides_examples = guides_examples
     guide.save()
     
-    # Log regeneration
-    LevellingGuideLog.objects.create(
-        levelling_guide=guide,
-        updated_by=user,
-        guide_examples={'competency': competency, 'level': level, 'examples': new_examples},
-        comment=feedback
-    )
+    # No logging for single cell regeneration - saves space
     
     return success_response(
         data={
@@ -356,6 +378,17 @@ def regenerate_all(request, guide_id):
     except LevellingGuide.DoesNotExist:
         return error_response('Guide not found', 404)
     
+    # Save current state BEFORE regeneration for the log
+    current_examples = guide.guides_examples
+    
+    # Log BEFORE regenerating - save what user was not satisfied with
+    LevellingGuideLog.objects.create(
+        levelling_guide=guide,
+        updated_by=user,
+        guide_examples=current_examples,  # Save current state user is rejecting
+        comment=global_feedback if global_feedback else "Full regeneration requested"
+    )
+    
     # Set all cells to pending
     guides_examples = guide.guides_examples
     for row in guides_examples.get('rows', []):
@@ -379,13 +412,6 @@ def regenerate_all(request, guide_id):
     guide.guides_examples = guides_examples
     set_guide_meta(guide, 'status', 'complete')
     guide.save()
-    
-    # Log
-    LevellingGuideLog.objects.create(
-        levelling_guide=guide,
-        updated_by=user,
-        comment=f"Regenerate all: {global_feedback}"
-    )
     
     return success_response(
         data={
