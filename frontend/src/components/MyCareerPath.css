@@ -1,0 +1,347 @@
+.career-page {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Header */
+.career-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+.career-header h1 {
+    color: #fff;
+    font-size: 28px;
+    margin: 0 0 4px 0;
+}
+
+.career-header p {
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    font-size: 14px;
+}
+
+.btn-configure-small {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 8px 14px;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.btn-configure-small:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* Milestone Slider */
+.milestone-slider {
+    position: relative;
+    padding: 30px 0 20px;
+    margin-bottom: 30px;
+}
+
+.milestone-track {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+}
+
+.milestone-line {
+    position: absolute;
+    top: 45px;
+    left: 5%;
+    right: 5%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 1;
+}
+
+.milestone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.milestone:hover {
+    transform: translateY(-2px);
+}
+
+.milestone-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    transition: all 0.2s;
+}
+
+.milestone.past .milestone-dot {
+    background: rgba(102, 126, 234, 0.5);
+    border-color: #667eea;
+}
+
+.milestone.current .milestone-dot {
+    width: 28px;
+    height: 28px;
+    background: #667eea;
+    border-color: #667eea;
+    box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+}
+
+.milestone.future .milestone-dot {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.milestone.active .milestone-dot {
+    border-width: 3px;
+    border-color: #22c55e;
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+}
+
+.you-badge {
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #667eea;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.milestone-label {
+    margin-top: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 11px;
+    text-align: center;
+    max-width: 80px;
+}
+
+.milestone.current .milestone-label,
+.milestone.active .milestone-label {
+    color: #fff;
+    font-weight: 500;
+}
+
+/* Level Details */
+.level-details {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.level-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.level-card.main {
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+.level-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.level-name {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    text-transform: uppercase;
+}
+
+.tag.current {
+    background: rgba(102, 126, 234, 0.2);
+    color: #667eea;
+}
+
+.tag.next {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+}
+
+/* Competencies */
+.competencies-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.competency-item {
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+}
+
+.competency-item h4 {
+    color: #fff;
+    font-size: 14px;
+    margin: 0 0 8px 0;
+}
+
+.competency-item .description {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.career-examples {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.career-examples-label {
+    color: #667eea;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.career-examples ul {
+    margin: 8px 0 0;
+    padding: 0 0 0 16px;
+}
+
+.career-examples li {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 4px;
+}
+
+/* Next Peek */
+.next-peek {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.peek-btn {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    padding: 12px 24px;
+    border-radius: 10px;
+    color: #22c55e;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.peek-btn:hover {
+    background: rgba(34, 197, 94, 0.15);
+}
+
+.peek-btn strong {
+    color: #fff;
+}
+
+/* Empty/Error States */
+.career-empty,
+.career-error {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.career-error {
+    border-color: rgba(251, 191, 36, 0.3);
+}
+
+.career-empty h3,
+.career-error h3 {
+    color: #fff;
+    font-size: 20px;
+    margin: 0 0 10px;
+}
+
+.career-empty p,
+.career-error p {
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+}
+
+.career-error .hint {
+    margin-top: 12px;
+    color: rgba(251, 191, 36, 0.8);
+}
+
+.btn-settings {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn-settings:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+@media (max-width: 768px) {
+    .career-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .career-empty,
+    .career-error {
+        padding: 30px 20px;
+    }
+
+    .milestone-track {
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+
+    .milestone {
+        min-width: 60px;
+    }
+}
