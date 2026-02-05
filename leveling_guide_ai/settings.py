@@ -28,12 +28,13 @@ ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY')
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e@84b-en&h7ru4zjqwtfm8xz33+nch01u!q)sm4x@tu^fsvvld'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-e@84b-en&h7ru4zjqwtfm8xz33+nch01u!q)sm4x@tu^fsvvld')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = []
+# Allowed hosts from environment variable (comma-separated)
+ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()]
 
 
 # Application definition
@@ -125,7 +126,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # For collectstatic in production
 
 # Custom User Model
 AUTH_USER_MODEL = 'app.User'
@@ -138,4 +140,15 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
 ]
+
+# Add production origins from environment
+CORS_ALLOWED_ORIGIN = os.getenv('CORS_ALLOWED_ORIGIN')
+if CORS_ALLOWED_ORIGIN:
+    CORS_ALLOWED_ORIGINS.append(CORS_ALLOWED_ORIGIN)
+
+# Allow all origins in production if needed (be careful with this)
+if not DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+
 CORS_ALLOW_CREDENTIALS = True
+
